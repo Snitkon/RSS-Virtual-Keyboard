@@ -1,5 +1,21 @@
 body {
   margin: 0;
+  font-family: "Trebuchet MS", "Helvetica", sans-serif;
+  font-weight: 500;
+}
+
+#textarea {
+  display: block;
+  width: 895px;
+  height: 250px;
+  font-family: "Trebuchet MS", "Helvetica", sans-serif;
+  font-size: 20px;
+  margin: 10px auto 10px;
+  padding: 10px;
+  background: #9c9b9b;
+  border: 2px solid #222222;
+  border-radius: 5px;
+  resize: none;
 }
 
 #keyboard {
@@ -9,7 +25,6 @@ body {
   grid-template-columns: repeat(30, 25px);
   grid-template-rows: repeat(10, 25px);
   gap: 5px;
-  font-family: "Trebuchet MS", "Helvetica", sans-serif;
   background: #888888;
   border: 2px solid #222222;
   border-radius: 5px;
@@ -19,7 +34,6 @@ body {
 .single-button {
   grid-row: span 2;
   grid-column: span 2;
-  font-weight: 500;
   line-height: 55px;
   text-align: center;
   color: #ffffff;
@@ -32,7 +46,6 @@ body {
 .double-button {
   grid-row: span 2;
   grid-column-end: span 2;
-  font-weight: 500;
   line-height: 55px;
   text-align: center;
   background-color: #1d1d1d;
