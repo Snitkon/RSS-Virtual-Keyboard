@@ -1,20 +1,22 @@
 const body = document.querySelector("body");
-let div = document.createElement("div");
-div.setAttribute("id", "keyboard");
-body.append(div);
-
-const keyboardKey = [
+const textarea = document.createElement("textarea");
+const div = document.createElement("div");
+let isCapslockOn = false;
+let isShiftOn = false;
+let isRus = false;
+let template;
+const keysList = [
   {
     class: "single-button",
+    code: "Backquote",
     eng: "`",
     rus: "]",
     shiftEng: "~",
     shiftRus: "[",
-    key: "Backquote",
   },
   {
     class: "single-button",
-    key: "Digit1",
+    code: "Digit1",
     eng: "1",
     rus: "1",
     shiftEng: "!",
@@ -22,7 +24,7 @@ const keyboardKey = [
   },
   {
     class: "single-button",
-    key: "Digit2",
+    code: "Digit2",
     eng: "2",
     rus: "2",
     shiftEng: "@",
@@ -30,7 +32,7 @@ const keyboardKey = [
   },
   {
     class: "single-button",
-    key: "Digit3",
+    code: "Digit3",
     eng: "3",
     rus: "3",
     shiftEng: "#",
@@ -38,7 +40,7 @@ const keyboardKey = [
   },
   {
     class: "single-button",
-    key: "Digit4",
+    code: "Digit4",
     eng: "4",
     rus: "4",
     shiftEng: "$",
@@ -46,7 +48,7 @@ const keyboardKey = [
   },
   {
     class: "single-button",
-    key: "Digit5",
+    code: "Digit5",
     eng: "5",
     rus: "5",
     shiftEng: "%",
@@ -54,7 +56,7 @@ const keyboardKey = [
   },
   {
     class: "single-button",
-    key: "Digit6",
+    code: "Digit6",
     eng: "6",
     rus: "6",
     shiftEng: "^",
@@ -62,7 +64,7 @@ const keyboardKey = [
   },
   {
     class: "single-button",
-    key: "Digit7",
+    code: "Digit7",
     eng: "7",
     rus: "7",
     shiftEng: "&",
@@ -70,7 +72,7 @@ const keyboardKey = [
   },
   {
     class: "single-button",
-    key: "Digit8",
+    code: "Digit8",
     eng: "8",
     rus: "8",
     shiftEng: "*",
@@ -78,7 +80,7 @@ const keyboardKey = [
   },
   {
     class: "single-button",
-    key: "Digit9",
+    code: "Digit9",
     eng: "9",
     rus: "9",
     shiftEng: "(",
@@ -86,7 +88,7 @@ const keyboardKey = [
   },
   {
     class: "single-button",
-    key: "Digit0",
+    code: "Digit0",
     eng: "0",
     rus: "0",
     shiftEng: ")",
@@ -94,7 +96,7 @@ const keyboardKey = [
   },
   {
     class: "single-button",
-    key: "Minus",
+    code: "Minus",
     eng: "-",
     rus: "-",
     shiftEng: "_",
@@ -102,7 +104,7 @@ const keyboardKey = [
   },
   {
     class: "single-button",
-    key: "Equal",
+    code: "Equal",
     eng: "=",
     rus: "=",
     shiftEng: "+",
@@ -110,19 +112,23 @@ const keyboardKey = [
   },
   {
     class: "double-button backspace",
-    key: "Backspace",
+    code: "Backspace",
     eng: "Backspace",
     rus: "Backspace",
+    shiftEng: "Backspace",
+    shiftRus: "Backspace",
   },
   {
     class: "double-button tab",
-    key: "Tab",
+    code: "Tab",
     eng: "tab",
     rus: "tab",
+    shiftEng: "tab",
+    shiftRus: "tab",
   },
   {
     class: "single-button",
-    key: "KeyQ",
+    code: "KeyQ",
     eng: "q",
     rus: "й",
     shiftEng: "Q",
@@ -130,7 +136,7 @@ const keyboardKey = [
   },
   {
     class: "single-button",
-    key: "KeyW",
+    code: "KeyW",
     eng: "w",
     rus: "ц",
     shiftEng: "W",
@@ -138,7 +144,7 @@ const keyboardKey = [
   },
   {
     class: "single-button",
-    key: "KeyE",
+    code: "KeyE",
     eng: "e",
     rus: "у",
     shiftEng: "E",
@@ -146,7 +152,7 @@ const keyboardKey = [
   },
   {
     class: "single-button",
-    key: "KeyR",
+    code: "KeyR",
     eng: "r",
     rus: "r",
     shiftEng: "R",
@@ -154,7 +160,7 @@ const keyboardKey = [
   },
   {
     class: "single-button",
-    key: "KeyT",
+    code: "KeyT",
     eng: "t",
     rus: "е",
     shiftEng: "T",
@@ -162,7 +168,7 @@ const keyboardKey = [
   },
   {
     class: "single-button",
-    key: "KeyY",
+    code: "KeyY",
     eng: "y",
     rus: "н",
     shiftEng: "Y",
@@ -170,7 +176,7 @@ const keyboardKey = [
   },
   {
     class: "single-button",
-    key: "KeyU",
+    code: "KeyU",
     eng: "u",
     rus: "г",
     shiftEng: "U",
@@ -178,7 +184,7 @@ const keyboardKey = [
   },
   {
     class: "single-button",
-    key: "KeyI",
+    code: "KeyI",
     eng: "i",
     rus: "ш",
     shiftEng: "I",
@@ -186,7 +192,7 @@ const keyboardKey = [
   },
   {
     class: "single-button",
-    key: "KeyO",
+    code: "KeyO",
     eng: "o",
     rus: "щ",
     shiftEng: "O",
@@ -194,7 +200,7 @@ const keyboardKey = [
   },
   {
     class: "single-button",
-    key: "KeyP",
+    code: "KeyP",
     eng: "p",
     rus: "з",
     shiftEng: "P",
@@ -202,7 +208,7 @@ const keyboardKey = [
   },
   {
     class: "single-button",
-    key: "BracketLeft",
+    code: "BracketLeft",
     eng: "[",
     rus: "х",
     shiftEng: "{",
@@ -210,7 +216,7 @@ const keyboardKey = [
   },
   {
     class: "single-button",
-    key: "BracketRight",
+    code: "BracketRight",
     eng: "]",
     rus: "ъ",
     shiftEng: "}",
@@ -218,7 +224,7 @@ const keyboardKey = [
   },
   {
     class: "single-button",
-    key: "Backslash",
+    code: "Backslash",
     eng: "\\",
     rus: "ё",
     shiftEng: "|",
@@ -226,13 +232,15 @@ const keyboardKey = [
   },
   {
     class: "double-button capslock",
-    key: "CapsLock",
+    code: "CapsLock",
     eng: "caps lock",
     rus: "caps lock",
+    shiftEng: "caps lock",
+    shiftRus: "caps lock",
   },
   {
     class: "single-button",
-    key: "KeyA",
+    code: "KeyA",
     eng: "a",
     rus: "ф",
     shiftEng: "A",
@@ -240,7 +248,7 @@ const keyboardKey = [
   },
   {
     class: "single-button",
-    key: "KeyS",
+    code: "KeyS",
     eng: "s",
     rus: "ы",
     shiftEng: "S",
@@ -248,7 +256,7 @@ const keyboardKey = [
   },
   {
     class: "single-button",
-    key: "KeyD",
+    code: "KeyD",
     eng: "d",
     rus: "в",
     shiftEng: "D",
@@ -256,7 +264,7 @@ const keyboardKey = [
   },
   {
     class: "single-button",
-    key: "KeyF",
+    code: "KeyF",
     eng: "f",
     rus: "а",
     shiftEng: "F",
@@ -264,7 +272,7 @@ const keyboardKey = [
   },
   {
     class: "single-button",
-    key: "KeyG",
+    code: "KeyG",
     eng: "g",
     rus: "П",
     shiftEng: "G",
@@ -272,7 +280,7 @@ const keyboardKey = [
   },
   {
     class: "single-button",
-    key: "KeyH",
+    code: "KeyH",
     eng: "h",
     rus: "р",
     shiftEng: "H",
@@ -280,7 +288,7 @@ const keyboardKey = [
   },
   {
     class: "single-button",
-    key: "KeyJ",
+    code: "KeyJ",
     eng: "j",
     rus: "о",
     shiftEng: "J",
@@ -288,7 +296,7 @@ const keyboardKey = [
   },
   {
     class: "single-button",
-    key: "KeyK",
+    code: "KeyK",
     eng: "k",
     rus: "л",
     shiftEng: "K",
@@ -296,7 +304,7 @@ const keyboardKey = [
   },
   {
     class: "single-button",
-    key: "KeyL",
+    code: "KeyL",
     eng: "l",
     rus: "д",
     shiftEng: "L",
@@ -304,7 +312,7 @@ const keyboardKey = [
   },
   {
     class: "single-button",
-    key: "Semicolon",
+    code: "Semicolon",
     eng: ";",
     rus: "ж",
     shiftEng: ":",
@@ -312,7 +320,7 @@ const keyboardKey = [
   },
   {
     class: "single-button",
-    key: "Quote",
+    code: "Quote",
     eng: "'",
     rus: "э",
     shiftEng: '"',
@@ -320,19 +328,23 @@ const keyboardKey = [
   },
   {
     class: "double-button enter",
-    key: "Enter",
+    code: "Enter",
     eng: "enter",
     rus: "enter",
+    shiftEng: "enter",
+    shiftRus: "enter",
   },
   {
     class: "double-button shift-left",
-    key: "ShiftLeft",
+    code: "ShiftLeft",
     eng: "shift",
     rus: "shift",
+    shiftEng: "shift",
+    shiftRus: "shift",
   },
   {
     class: "single-button",
-    key: "KeyZ",
+    code: "KeyZ",
     eng: "z",
     rus: "я",
     shiftEng: "Z",
@@ -340,7 +352,7 @@ const keyboardKey = [
   },
   {
     class: "single-button",
-    key: "KeyX",
+    code: "KeyX",
     eng: "x",
     rus: "ч",
     shiftEng: "X",
@@ -348,7 +360,7 @@ const keyboardKey = [
   },
   {
     class: "single-button",
-    key: "KeyC",
+    code: "KeyC",
     eng: "c",
     rus: "c",
     shiftEng: "C",
@@ -356,7 +368,7 @@ const keyboardKey = [
   },
   {
     class: "single-button",
-    key: "KeyV",
+    code: "KeyV",
     eng: "v",
     rus: "М",
     shiftEng: "V",
@@ -364,7 +376,7 @@ const keyboardKey = [
   },
   {
     class: "single-button",
-    key: "KeyB",
+    code: "KeyB",
     eng: "b",
     rus: "и",
     shiftEng: "B",
@@ -372,7 +384,7 @@ const keyboardKey = [
   },
   {
     class: "single-button",
-    key: "KeyN",
+    code: "KeyN",
     eng: "n",
     rus: "т",
     shiftEng: "N",
@@ -380,7 +392,7 @@ const keyboardKey = [
   },
   {
     class: "single-button",
-    key: "KeyM",
+    code: "KeyM",
     eng: "m",
     rus: "ь",
     shiftEng: "M",
@@ -388,7 +400,7 @@ const keyboardKey = [
   },
   {
     class: "single-button",
-    key: "Comma",
+    code: "Comma",
     eng: ",",
     rus: "б",
     shiftEng: "<",
@@ -396,7 +408,7 @@ const keyboardKey = [
   },
   {
     class: "single-button",
-    key: "Period",
+    code: "Period",
     eng: ".",
     rus: "ю",
     shiftEng: ">",
@@ -404,109 +416,250 @@ const keyboardKey = [
   },
   {
     class: "single-button",
-    key: "Slash",
+    code: "Slash",
     eng: "/",
     rus: "/",
-    shiftEng: "?",
-    shiftRus: "?",
+    shiftEng: "/",
+    shiftRus: "/",
   },
   {
     class: "double-button shift-right",
-    key: "ShiftRight",
+    code: "ShiftRight",
     eng: "shift",
     rus: "shift",
+    shiftEng: "shift",
+    shiftRus: "shift",
   },
   {
     class: "double-button control-left",
-    key: "ControlLeft",
+    code: "ControlLeft",
     eng: "ctrl",
     rus: "ctrl",
+    shiftEng: "ctrl",
+    shiftRus: "ctrl",
   },
   {
     class: "double-button alt-left",
-    key: "AltLeft",
+    code: "AltLeft",
     eng: "alt",
     rus: "alt",
+    shiftEng: "alt",
+    shiftRus: "alt",
   },
   {
     class: "double-button command-left",
-    key: "MetaLeft",
+    code: "MetaLeft",
     eng: "cmd",
     rus: "cmd",
+    shiftEng: "cmd",
+    shiftRus: "cmd",
   },
   {
     class: "double-button space",
-    key: "Space",
+    code: "Space",
     eng: " ",
     rus: " ",
+    shiftEng: " ",
+    shiftRus: " ",
   },
   {
     class: "double-button command-right",
-    key: "MetaRight",
+    code: "MetaRight",
     eng: "cmd",
     rus: "cmd",
+    shiftEng: "cmd",
+    shiftRus: "cmd",
   },
   {
     class: "double-button alt-right",
-    key: "AltRight",
+    code: "AltRight",
     eng: "alt",
     rus: "alt",
+    shiftEng: "alt",
+    shiftRus: "alt",
   },
   {
     class: "double-button arrow-left",
-    key: "ArrowLeft",
+    code: "ArrowLeft",
     eng: "&larr;",
     rus: "&larr;",
+    shiftEng: "&larr;",
+    shiftRus: "&larr;",
   },
   {
     class: "double-button arrow-up",
-    key: "ArrowUp",
+    code: "ArrowUp",
     eng: "&uarr;",
     rus: "&uarr;",
+    shiftEng: "&uarr;",
+    shiftRus: "&uarr;",
   },
   {
     class: "double-button arrow-down",
-    key: "ArrowDown",
+    code: "ArrowDown",
     eng: "&darr;",
     rus: "&darr;",
+    shiftEng: "&darr;",
+    shiftRus: "&darr;",
   },
   {
     class: "double-button arrow-right",
-    key: "ArrowRight",
+    code: "ArrowRight",
     eng: "&rarr;",
     rus: "&rarr;",
+    shiftEng: "&rarr;",
+    shiftRus: "&rarr;",
   },
 ];
 
-const template = keyboardKey.reduce((prev, current) => {
-  return prev + `<div class="${current.class}" data-key="${current.key}">${current.eng}</div>`;
-}, "");
+window.onload = () => {
+  textarea.setAttribute("id", "textarea");
+  body.append(textarea);
+  div.setAttribute("id", "keyboard");
+  body.append(div);
 
-div.insertAdjacentHTML("afterbegin", template);
+  generateTemplate();
+};
+
+function backspace() {
+  if (!textarea.innerHTML.length) return;
+  const arr = textarea.innerHTML.split("");
+  arr.pop();
+  const str = arr.join("");
+  textarea.innerHTML = str;
+}
+
+function generateTemplate() {
+  template = keysList.reduce((prev, current) => {
+    return prev + `<div class="${current.class}" data-code="${current.code}">${isRus ? current.rus : current.eng}</div>`;
+  }, "");
+  div.innerHTML = template;
+}
+
+function generateShiftTemplate() {
+  template = keysList.reduce((prev, current) => {
+    return (
+      prev + `<div class="${current.class}" data-code="${current.code}">${isRus ? current.shiftRus : current.shiftEng}</div>`
+    );
+  }, "");
+  div.innerHTML = template;
+}
+
+function activatePressedButton(template) {
+  template.classList.add("active");
+}
+
+function diactivatePressedButton(template) {
+  template.classList.remove("active");
+}
+
+function inputText(code, element) {
+  if (
+    [
+      "ShiftLeft",
+      "ShiftRight",
+      "CapsLock",
+      "ControlLeft",
+      "AltLeft",
+      "AltRight",
+      "MetaRight",
+      "MetaLeft",
+      "Tab",
+      "Enter",
+      "ArrowLeft",
+      "ArrowUp",
+      "ArrowDown",
+      "ArrowRight",
+    ].includes(code)
+  )
+    return;
+  if (isShiftOn) {
+    textarea.innerHTML += element.shiftEng;
+    return;
+  }
+  if (isCapslockOn) {
+    textarea.innerHTML += element.eng.toUpperCase();
+    return;
+  }
+  textarea.innerHTML += element.eng;
+}
 
 document.addEventListener("keydown", (event) => {
   event.preventDefault();
-  const element = Array.from(div.children).find((element) => {
-    return element.getAttribute("data-key") === event.code;
+  isShiftOn = event.shiftKey;
+  if (isShiftOn) {
+    generateShiftTemplate();
+  }
+
+  if (event.code === "Enter") {
+    textarea.innerHTML += "\n";
+  }
+
+  if (event.code === "Backspace") {
+    backspace();
+    return;
+  }
+
+  if (event.code === "Tab") {
+    textarea.innerHTML += "    ";
+  }
+
+  isCapslockOn = event.getModifierState("CapsLock");
+
+  if (event.altKey && event.ctrlKey) {
+    isRus = !isRus;
+    generateTemplate();
+  }
+
+  const currentTemplate = Array.from(div.children).find((element) => {
+    return element.getAttribute("data-code") === event.code;
   });
-  element.classList.add("active");
+
+  const currentElement = keysList.find((element) => {
+    return event.code === element.code;
+  });
+
+  activatePressedButton(currentTemplate);
+  inputText(event.code, currentElement);
 });
 
 document.addEventListener("keyup", (event) => {
-  const element = Array.from(div.children).find((element) => {
-    return element.getAttribute("data-key") === event.code;
+  isShiftOn = event.shiftKey;
+  if (!isShiftOn) {
+    generateTemplate();
+  }
+  isCapslockOn = event.getModifierState("CapsLock");
+  const currentTemplate = Array.from(div.children).find((element) => {
+    return element.getAttribute("data-code") === event.code;
   });
-  element.classList.remove("active");
+
+  diactivatePressedButton(currentTemplate);
 });
 
 div.addEventListener("mousedown", (event) => {
-  if (event.target.getAttribute("data-key")) {
-    event.target.classList.add("active");
+  event.preventDefault();
+  if (!event.target.getAttribute("data-code")) return;
+  if (event.code === "Tab") {
+    textarea.innerHTML += "    ";
   }
+
+  const currentTemplate = Array.from(div.children).find((element) => {
+    return element.getAttribute("data-code") === event.target.getAttribute("data-code");
+  });
+
+  const currentElement = keysList.find((element) => {
+    return event.target.getAttribute("data-code") === element.code;
+  });
+
+  activatePressedButton(currentTemplate);
+  inputText(event.target.getAttribute("data-code"), currentElement);
 });
 
 div.addEventListener("mouseup", (event) => {
-  if (event.target.getAttribute("data-key")) {
-    event.target.classList.remove("active");
-  }
+  if (!event.target.getAttribute("data-code")) return;
+  const currentTemplate = Array.from(div.children).find((element) => {
+    return element.getAttribute("data-code") === event.target.getAttribute("data-code");
+  });
+
+  diactivatePressedButton(currentTemplate);
 });
