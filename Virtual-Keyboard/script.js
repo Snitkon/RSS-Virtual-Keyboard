@@ -1,6 +1,7 @@
 const body = document.querySelector("body");
 const textarea = document.createElement("textarea");
 const div = document.createElement("div");
+const p = document.createElement("p")
 let isCapslockOn = false;
 let isShiftOn = false;
 let isRus = false;
@@ -517,6 +518,8 @@ window.onload = () => {
   body.append(textarea);
   div.setAttribute("id", "keyboard");
   body.append(div);
+  p.setAttribute("id", "text");
+  body.append(p)
 
   generateTemplate();
 };
@@ -663,3 +666,5 @@ div.addEventListener("mouseup", (event) => {
 
   diactivatePressedButton(currentTemplate);
 });
+
+p.innerHTML += "Для переключения языка комбинация: левыe ctrl + alt <br> Клавиатура создана на системе macOS"
