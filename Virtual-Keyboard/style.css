@@ -1,0 +1,116 @@
+body {
+  margin: 0;
+  font-family: "Trebuchet MS", "Helvetica", sans-serif;
+  font-weight: 500;
+}
+
+#textarea {
+  display: block;
+  width: 895px;
+  height: 250px;
+  font-family: "Trebuchet MS", "Helvetica", sans-serif;
+  font-size: 20px;
+  margin: 10px auto 10px;
+  padding: 10px;
+  background: #9c9b9b;
+  border: 2px solid #222222;
+  border-radius: 5px;
+  resize: none;
+}
+
+#keyboard {
+  display: grid;
+  width: 896px;
+  margin: auto;
+  grid-template-columns: repeat(30, 25px);
+  grid-template-rows: repeat(10, 25px);
+  gap: 5px;
+  background: #888888;
+  border: 2px solid #222222;
+  border-radius: 5px;
+  padding: 10px;
+}
+
+#text {
+  text-align: center;
+  line-height: 30px;
+}
+
+.single-button {
+  grid-row: span 2;
+  grid-column: span 2;
+  line-height: 55px;
+  text-align: center;
+  color: #ffffff;
+  background: #444444;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: border-radius 0.3s, background-color 0.3s;
+}
+
+.double-button {
+  grid-row: span 2;
+  grid-column-end: span 2;
+  line-height: 55px;
+  text-align: center;
+  background-color: #1d1d1d;
+  color: #696868;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: border-radius 0.3s, background-color 0.3s;
+}
+
+.backspace,
+.tab,
+.capslock,
+.enter {
+  grid-column: span 4;
+}
+
+.shift-left,
+.shift-right {
+  grid-column: span 5;
+}
+
+.control-left,
+.command-left,
+.command-right {
+  grid-column: span 3;
+}
+
+.alt-left,
+.alt-right {
+  grid-column: span 2;
+}
+
+.space {
+  grid-column: span 11;
+}
+
+.arrow-down,
+.arrow-up {
+  line-height: 24px;
+}
+
+.arrow-up,
+.arrow-down {
+  grid-row: span 1;
+}
+
+.arrow-left,
+.arrow-right {
+  grid-row: span 2;
+}
+
+.arrow-down {
+  grid-column-start: 27;
+}
+
+.arrow-right {
+  grid-row: -3 / -1;
+  grid-column: 29/31;
+}
+
+.active {
+  background-color: orange;
+}
