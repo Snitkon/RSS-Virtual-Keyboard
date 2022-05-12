@@ -1,7 +1,7 @@
 const body = document.querySelector("body");
 const textarea = document.createElement("textarea");
 const div = document.createElement("div");
-const p = document.createElement("p")
+const p = document.createElement("p");
 let isCapslockOn = false;
 let isShiftOn = false;
 let isRus = false;
@@ -275,7 +275,7 @@ const keysList = [
     class: "single-button",
     code: "KeyG",
     eng: "g",
-    rus: "П",
+    rus: "п",
     shiftEng: "G",
     shiftRus: "п",
   },
@@ -371,7 +371,7 @@ const keysList = [
     class: "single-button",
     code: "KeyV",
     eng: "v",
-    rus: "М",
+    rus: "м",
     shiftEng: "V",
     shiftRus: "м",
   },
@@ -519,7 +519,7 @@ window.onload = () => {
   div.setAttribute("id", "keyboard");
   body.append(div);
   p.setAttribute("id", "text");
-  body.append(p)
+  body.append(p);
 
   generateTemplate();
 };
@@ -577,14 +577,14 @@ function inputText(code, element) {
   )
     return;
   if (isShiftOn) {
-    textarea.innerHTML += element.shiftEng;
+    textarea.innerHTML += isRus ? element.shiftRus : element.shiftEng;
     return;
   }
   if (isCapslockOn) {
-    textarea.innerHTML += element.eng.toUpperCase();
+    textarea.innerHTML += isRus ? element.rus.toUpperCase() : element.eng.toUpperCase();
     return;
   }
-  textarea.innerHTML += element.eng;
+  textarea.innerHTML += isRus ? element.rus : element.eng;
 }
 
 document.addEventListener("keydown", (event) => {
@@ -667,4 +667,4 @@ div.addEventListener("mouseup", (event) => {
   diactivatePressedButton(currentTemplate);
 });
 
-p.innerHTML += "Для переключения языка комбинация: левыe ctrl + alt <br> Клавиатура создана на системе macOS"
+p.innerHTML += "Для переключения языка комбинация: левыe ctrl + alt <br> Клавиатура создана на системе macOS";
